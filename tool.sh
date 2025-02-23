@@ -75,9 +75,9 @@ download_path="$download_dir/$savename"
 check_version
 ###下载HWINFO###
 name="HWINFO"
-    echo "开始下载HWINFO"
-get_version=$(curl -s https://www.hwinfo.com/download/ | grep -oP '<sub>Version \K[\d\.]+' | head -n 1 | sed 's/\.//g')
-dl_url=https://versaweb.dl.sourceforge.net/project/hwinfo/Windows_Portable/hwi_"$get_version".zip
+    echo "开始下载HWINFO-Beta"
+get_version=$(curl -s https://www.hwinfo.com/download/ | grep -oP 'v\K\d+\.\d+-\d+' | sed 's/\.//;s/-/_/')
+dl_url=https://zenlayer.dl.sourceforge.net/project/hwinfo/Windows_Beta/hwi_"$get_version".zip
 download_path="$download_dir/$(basename "$dl_url")"
 check_version
 ###下载7-ZIP###
