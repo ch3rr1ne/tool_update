@@ -77,7 +77,7 @@ check_version
 name="HWINFO"
     echo "开始下载HWINFO-Beta"
 get_version=$(curl -s https://www.hwinfo.com/download/ | grep -oP 'v\K\d+\.\d+-\d+' | sed 's/\.//;s/-/_/')
-dl_url=https://zenlayer.dl.sourceforge.net/project/hwinfo/Windows_Beta/hwi_"$get_version".zip
+dl_url=https://sourceforge.net/projects/hwinfo/files/Windows_Beta/hwi_"$get_version".zip
 download_path="$download_dir/$(basename "$dl_url")"
 check_version
 ###下载7-ZIP###
