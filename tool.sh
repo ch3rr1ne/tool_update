@@ -11,7 +11,7 @@ if [ ! -f "$version_file" ]; then
 mkdir -p "$download_dir"
 touch "$version_file"
 usr=$(whoami)
-echo "0 0 * * * $script_dir/tool.sh" >> /var/spool/cron/crontabs/$usr
+echo "0 0 * * * $(pwd)/tool.sh" >> /var/spool/cron/crontabs/$usr
 apt install wget -y
 fi
 #是否存在版本号记录和下载功能
