@@ -61,7 +61,7 @@ check_version
 name="CPU-Z"
     echo "开始下载 $name"
 get_version=$(curl -s https://www.cpuid.com/softwares/cpu-z.html | grep -oP 'Version \K\d+\.\d+' | sort -V | tail -n 1)
-dl_url=https://www.cpuid.com/downloads/cpu-z/cpu-z_"$get_version"-cn.exe
+dl_url=https://download.cpuid.com/cpu-z/cpu-z_"$get_version"-cn.exe
 download_path="$download_dir/$(basename "$dl_url")"
 check_version
 ###下载GPU-Z###
