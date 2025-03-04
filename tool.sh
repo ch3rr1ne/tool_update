@@ -22,6 +22,7 @@ if [ "$saved_version" == "$get_version" ]; then
     else
         yellow "$name 当前版本: $saved_version , 最新版本: $get_version"
             mv "$download_dir/$savename" "$download_dir/history/"
+            ls -t "$download_dir/history/${name}"* | tail -n +6 | xargs rm -f
             start_download
 #更新版本号
     if ! grep -q "^$name" "$version_file"; then
