@@ -22,7 +22,7 @@ if [ "$saved_version" == "$get_version" ]; then
     else
         yellow "$name 当前版本: $saved_version , 最新版本: $get_version"
             mv "$download_dir/$savename" "$download_dir/history/"
-            ls -t "$download_dir/history/${name}"* | tail -n +6 | xargs rm -f
+            ls -t "$download_dir/history/${savename}"* | tail -n +6 | xargs rm -f
             start_download
 #更新版本号
     if ! grep -q "^$name" "$version_file"; then
@@ -41,13 +41,15 @@ else
     resume_flag=""
 fi
 retries=0
-    until wget $resume_flag --timeout=30 --tries=3 -O "$download_path" "$dl_url"; do
+max_retries=10
+while [ $retries -le $max_retries ]; do
+    if wget $resume_flag --timeout=30 --tries=3 -O "$download_path" "$dl_url"; then
+        break
+    else
         retries=$((retries+1))
-        if [ $retries -ge 10 ]; then
-            yellow "下载失败，网络超时"
-        fi
-            sleep 1
-    done
+        sleep $(( 2**retries ))
+    fi
+done
 }
 ###下载小飞机###
 name="MSIAfterburner"
@@ -76,7 +78,7 @@ check_version
 name="HWINFO"
     echo "开始下载HWINFO"
 get_version=$(curl -s https://www.hwinfo.com/download/ | grep -oP '<sub>Version \K[\d\.]+' | head -n 1 | sed 's/\.//g')
-dl_url=https://sourceforge.net/project/hwinfo/Windows_Portable/hwi_"$get_version".zip
+dl_url=https://sourceforge.net/projects/hwinfo/files/Windows_Portable/hwi_"$get_version".zip
 savename=$(basename "$dl_url")
 check_version
 ###下载7-ZIP###
@@ -93,6 +95,3 @@ get_version=$(curl -s https://www.aida64.com/downloads | grep -oP '<td class="ve
 dl_url=https://download2.aida64.com/aida64extreme"$get_version".zip
 savename=$(basename "$dl_url")
 check_version
-#日志
-log_file="/var/log/tool_updater.log"
-exec > >(tee -a "$log_file") 2>&1
