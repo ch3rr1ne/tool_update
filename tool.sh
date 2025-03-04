@@ -62,7 +62,7 @@ name="CPU-Z"
     echo "开始下载 $name"
 get_version=$(curl -s https://www.cpuid.com/softwares/cpu-z.html | grep -oP 'Version \K\d+\.\d+' | sort -V | tail -n 1)
 dl_url=https://download.cpuid.com/cpu-z/cpu-z_"$get_version"-cn.exe
-$savename=$(basename "$dl_url")
+savename=$(basename "$dl_url")
 check_version
 ###下载GPU-Z###
 name="GPU-Z"
@@ -77,21 +77,21 @@ name="HWINFO"
     echo "开始下载HWINFO"
 get_version=$(curl -s https://www.hwinfo.com/download/ | grep -oP '<sub>Version \K[\d\.]+' | head -n 1 | sed 's/\.//g')
 dl_url=https://sourceforge.net/project/hwinfo/Windows_Portable/hwi_"$get_version".zip
-$savename=$(basename "$dl_url")
+savename=$(basename "$dl_url")
 check_version
 ###下载7-ZIP###
 name="7-ZIP"
     echo "开始下载7-Zip"
 get_version=$(curl -s https://7-zip.org/ | grep -oP 'Download 7-Zip \K\d+\.\d+' | head -n 1 | sed 's/\.//g')
 dl_url=https://7-zip.org/a/7z"$get_version"-x64.exe
-$savename=$(basename "$dl_url")
+savename=$(basename "$dl_url")
 check_version
 ###下载AIDA64Extreme###
 name="AIDA64Extreme"
     echo "开始下载AIDA64Extreme"
 get_version=$(curl -s https://www.aida64.com/downloads | grep -oP '<td class="version">\K\d+\.\d+' |head -n 1 | sed 's/\.//g')
 dl_url=https://download2.aida64.com/aida64extreme"$get_version".zip
-$savename=$(basename "$dl_url")
+savename=$(basename "$dl_url")
 check_version
 #日志
 log_file="/var/log/tool_updater.log"
