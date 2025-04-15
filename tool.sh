@@ -4,11 +4,10 @@ yellow(){
 }
 script_dir=$(dirname "$0")
 download_dir="$script_dir/tool"
-version_file="$script_dir/$download_dir/version.txt"
+version_file="$script_dir/version.txt"
 #检测是否第一次运行（检测存放版本号文件是否存在）
 if [ ! -f "$version_file" ]; then
 mkdir -p "$download_dir"
-mkdir "$download_dir/history"
 touch "$version_file"
 usr=$(whoami)
 echo "0 */12 * * * $(pwd)/tool.sh" >> /var/spool/cron/crontabs/$usr
@@ -18,11 +17,10 @@ fi
 function check_version(){
 saved_version=$(grep -E "^$name" "$version_file" | cut -d' ' -f3-)
 if [ "$saved_version" == "$get_version" ]; then
-        yellow "$name 已是最新版本: $saved_version"
+        yellow "$name 已是最新版本: $get_version"
     else
         yellow "$name 当前版本: $saved_version , 最新版本: $get_version"
-            mv "$download_dir/$savename" "$download_dir/history/"
-            ls -t "$download_dir/history/${savename}"* | tail -n +6 | xargs rm -f
+            rm $download_dir/$name*
             start_download
 #更新版本号
     if ! grep -q "^$name" "$version_file"; then
@@ -53,15 +51,15 @@ done
 }
 ###下载小飞机###
 name="MSIAfterburner"
-    echo "开始下载 $name"
+    echo "开始下载 MSIAfterburner"
 get_version=$(curl -s https://www.guru3d.com/download/msi-afterburner-beta-download/ | grep -oP '<title>.*</title>' | awk -F'<title>|</title>' '{print $2}' | awk -F'r ' '{print $2}' | sed 's/ Download//')
 DL=$(echo $get_version | tr -d ' .')
 dl_url="https://ftp.nluug.nl/pub/games/PC/guru3d/afterburner/[Guru3D]-MSIAfterburnerSetup"$DL".zip"
 savename=$(echo "$dl_url" | grep -oP '(?<=-).*')
 check_version
 ###下载CPU-Z###
-name="CPU-Z"
-    echo "开始下载 $name"
+name="cpu-z"
+    echo "开始下载 CPU-Z"
 get_version=$(curl -s https://www.cpuid.com/softwares/cpu-z.html | grep -oP 'Version \K\d+\.\d+' | sort -V | tail -n 1)
 dl_url=https://download.cpuid.com/cpu-z/cpu-z_"$get_version"-cn.exe
 savename=$(basename "$dl_url")
@@ -75,21 +73,21 @@ filename=$(basename $dl_url)
 savename="${filename/\[Guru3D.com\]/$get_version}"
 check_version
 ###下载HWINFO###
-name="HWINFO"
+name="hwi"
     echo "开始下载HWINFO"
 get_version=$(curl -s https://www.hwinfo.com/download/ | grep -oP '<sub>Version \K[\d\.]+' | head -n 1 | sed 's/\.//g')
-dl_url=https://sourceforge.net/projects/hwinfo/files/Windows_Portable/hwi_"$get_version".zip
+dl_url=https://www.sac.sk/download/utildiag/hwi_"$get_version".zip
 savename=$(basename "$dl_url")
 check_version
 ###下载7-ZIP###
-name="7-ZIP"
+name="7z"
     echo "开始下载7-Zip"
 get_version=$(curl -s https://7-zip.org/ | grep -oP 'Download 7-Zip \K\d+\.\d+' | head -n 1 | sed 's/\.//g')
 dl_url=https://7-zip.org/a/7z"$get_version"-x64.exe
 savename=$(basename "$dl_url")
 check_version
 ###下载AIDA64Extreme###
-name="AIDA64Extreme"
+name="aida64extreme"
     echo "开始下载AIDA64Extreme"
 get_version=$(curl -s https://www.aida64.com/downloads | grep -oP '<td class="version">\K\d+\.\d+' |head -n 1 | sed 's/\.//g')
 dl_url=https://download2.aida64.com/aida64extreme"$get_version".zip
