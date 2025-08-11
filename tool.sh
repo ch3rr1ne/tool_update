@@ -9,10 +9,14 @@ version_file="$script_dir/version.txt"
 if [ ! -f "$version_file" ]; then
 mkdir -p "$download_dir"
 touch "$version_file"
-usr=$(whoami)
-echo "0 */12 * * * $(pwd)/tool.sh" >> /var/spool/cron/crontabs/$usr
-apt install wget -y
 fi
+usr=$(whoami)
+if [ ! -f "/var/spool/cron/crontabs/$usr" ]; then
+touch /var/spool/cron/crontabs/$usr
+echo "0 */12 * * * $(pwd)/tool.sh" >> /var/spool/cron/crontabs/$usr
+fi
+
+apt install wget -y
 #是否存在版本号记录和下载功能
 function check_version(){
 saved_version=$(grep -E "^$name" "$version_file" | cut -d' ' -f3-)
