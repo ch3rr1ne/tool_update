@@ -56,7 +56,7 @@ done
 ###下载小飞机###
 name="MSIAfterburner"
     echo "开始下载 MSIAfterburner"
-get_version=$(curl -s https://www.guru3d.com/download/msi-afterburner-beta-download/ | grep -oP '<title>.*</title>' | awk -F'<title>|</title>' '{print $2}' | awk -F'r ' '{print $2}' | sed 's/ Download//')
+get_version=$(curl -s https://www.guru3d.com/download/msi-afterburner-beta-download/ | grep -oP 'Download\s\K([0-9]+\.[0-9]+\.[0-9]+)\sStable\s\(Build\s([0-9]+)\)'| sed -E 's/\.//g;s/ Stable \(Build /Build/;s/[() ]//g')
 DL=$(echo $get_version | tr -d ' .')
 dl_url="https://ftp.nluug.nl/pub/games/PC/guru3d/afterburner/[Guru3D]-MSIAfterburnerSetup"$DL".zip"
 savename=$(echo "$dl_url" | grep -oP '(?<=-).*')
@@ -96,4 +96,28 @@ name="aida64extreme"
 get_version=$(curl -s https://www.aida64.com/downloads | grep -oP '<td class="version">\K\d+\.\d+' |head -n 1 | sed 's/\.//g')
 dl_url=https://download2.aida64.com/aida64extreme"$get_version".zip
 savename=$(basename "$dl_url")
+check_version
+###下载Fan Control###
+name="fan_control"
+    echo "开始下载Fan Control"
+get_version=$(curl -s https://getfancontrol.com/ | grep -oP '<span class="m-auto font-semibold">Download \K[^<]+')
+dl_url="https://github.com/Rem0o/FanControl.Releases/blob/master/FanControl.zip?raw=true"
+filename=$(basename $dl_url)
+savename=${filename%%\?*}
+check_version
+###下载英伟达驱动###
+name="nvidia_driver"
+    echo "开始下载英伟达驱动"
+get_version=$(curl -s https://www.guru3d.com/files/category/videocards-nvidia-geforce-windows-7-8-10/ | grep -oP 'NVIDIA GeForce \K[0-9.]+(?= WHQL)' | head -n 1)
+dl_url=https://us.download.nvidia.com/Windows/"$get_version"/"$get_version"-desktop-win10-win11-64bit-international-dch-whql.exe
+savename=$(basename $dl_url)
+check_version
+###下载FurMark2###
+name="furmark2"
+    echo "开始下载FurMark2"
+get_version=$(curl -s https://geeks3d.com/furmark/changelog/ | grep -oP '(?<=version\s)\d+\.\d+\.\d+(?=\.\d+)' | head -n 1)
+d_version=$(echo "$get_version" | sed 's/\./\\./g')
+down_site=$(curl -s https://geeks3d.com/furmark/downloads/ | grep -oP "href=\"/dl/show/\\K\\d+(?=\"[^>]*>v${d_version} - win64 - \\(ZIP\\))")
+dl_url=https://geeks3d.com/dl/get/$down_site
+savename=FurMark2.zip
 check_version
