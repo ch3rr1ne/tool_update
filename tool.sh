@@ -79,7 +79,7 @@ check_version
 ###下载HWINFO###
 name="hwi"
     echo "开始下载HWINFO"
-get_version=$(curl -s https://www.hwinfo.com/download/ | grep -oP '<sub>Version \K[\d\.]+' | head -n 1 | sed 's/\.//g')
+get_version=$(curl -s https://www.hwinfo.com/news.xml/ | grep -oP 'v\K\d+\.\d+' | head -n1 | tr -d '.')
 dl_url=https://www.sac.sk/download/utildiag/hwi_"$get_version".zip
 savename=$(basename "$dl_url")
 check_version
